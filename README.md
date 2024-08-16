@@ -1,4 +1,4 @@
-<h1>Oracle Apex Application for XML Form Creation</h1>
+<h1>Oracle APEX Application for XML Form Creation</h1>
 
 <h2>Introduction</h2>
 
