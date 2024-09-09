@@ -48,6 +48,8 @@
 <li><strong>Packages</strong>: These contain PL/SQL code to support the app functionality.</li>
 </ul>
 
+<p><strong>Note:</strong> This application uses the <a href="https://github.com/simonuwe/oracle-apex-json-region" target="_blank">JSON Region Plugin by Uwe Simon</a>, version <strong>0.9.5</strong>. This plugin is essential for integrating and managing the JSON and XML structures within Oracle APEX. For more information about this plugin and detailed instructions on how to configure it, please visit the <a href="https://github.com/simonuwe/oracle-apex-json-region" target="_blank">official documentation</a>.</p>
+
 <h3>4. Step: Launch the App</h3>
 
 <p>After successful installation, you can launch the app. Navigate to App Builder and click on the name of the newly installed app to start it. You can now begin creating forms directly.</p>
