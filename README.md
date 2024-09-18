@@ -1,8 +1,8 @@
-<h1>Oracle APEX Application for XML Form Creation</h1>
+<h1>Oracle APEX Application for JSON Form Creation</h1>
 
 <h2>Introduction</h2>
 
-<p>Here, I present to you an Oracle Apex application. With this application, you can easily generate XML-based forms. You don't need any knowledge of Oracle Apex, XML, or any programming skills. You can simply create a form through a few clicks in the menu, define the columns, and optionally add properties to the columns. In the end, you have your XML generated. It is very easy to use and user-friendly.</p>
+<p>Here, I present to you an Oracle Apex application. With this application, you can easily generate JSON-based forms. You don't need any knowledge of Oracle Apex, JSON, or any programming skills. You can simply create a form through a few clicks in the menu, define the columns, and optionally add properties to the columns. In the end, you have your JSON generated. It is very easy to use and user-friendly.</p>
 
 <h2>Download Options</h2>
 
@@ -48,7 +48,7 @@
 <li><strong>Packages</strong>: These contain PL/SQL code to support the app functionality.</li>
 </ul>
 
-<p><strong>Note:</strong> This application uses the <a href="https://github.com/simonuwe/oracle-apex-json-region" target="_blank">JSON Region Plugin by Uwe Simon</a>, version <strong>0.9.5</strong>. This plugin is essential for integrating and managing the JSON and XML structures within Oracle APEX. For more information about this plugin and detailed instructions on how to configure it, please visit the <a href="https://github.com/simonuwe/oracle-apex-json-region" target="_blank">official documentation</a>.</p>
+<p><strong>Note:</strong> This application uses the <a href="https://github.com/simonuwe/oracle-apex-json-region" target="_blank">JSON Region Plugin by Uwe Simon</a>, version <strong>0.9.5</strong>. This plugin is essential for integrating and managing the JSON structures within Oracle APEX. For more information about this plugin and detailed instructions on how to configure it, please visit the <a href="https://github.com/simonuwe/oracle-apex-json-region" target="_blank">official documentation</a>.</p>
 
 <h3>4. Step: Launch the App</h3>
 

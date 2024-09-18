@@ -1025,6 +1025,7 @@ create or replace PACKAGE       SFB_HELP_JSON_DATA_TYPE_PROPERTIES_PKG IS
  
 END SFB_HELP_JSON_DATA_TYPE_PROPERTIES_PKG;
 /
+
 create or replace PACKAGE       SFB_HELP_REFRENZ_JSON_FORM_PKG IS 
   /* 
   This is the API for the table SFB_HELP_REFRENZ_JSON_FORM. 
@@ -1106,6 +1107,7 @@ create or replace PACKAGE       SFB_HELP_REFRENZ_JSON_FORM_PKG IS
     p_hrjf_valid_from      IN SFB_HELP_REFRENZ_JSON_FORM.HRJF_VALID_FROM%TYPE        DEFAULT sysdate ,
     p_hrjf_valid_to        IN SFB_HELP_REFRENZ_JSON_FORM.HRJF_VALID_TO%TYPE          DEFAULT TO_DATE('31.12.2999', 'DD.MM.YYYY') ,
     p_hrjf_deleted_yn      IN SFB_HELP_REFRENZ_JSON_FORM.HRJF_DELETED_YN%TYPE        DEFAULT 'NO' ,
+    p_HRJF_ARRAY_YN        IN SFB_HELP_REFRENZ_JSON_FORM.HRJF_ARRAY_YN%TYPE        DEFAULT 'N' ,
     p_hrjf_name            IN SFB_HELP_REFRENZ_JSON_FORM.HRJF_NAME%TYPE               );
  
   FUNCTION create_row ( 
@@ -4628,6 +4630,7 @@ create or replace PACKAGE BODY       SFB_HELP_JSON_DATA_TYPE_PROPERTIES_PKG IS
  
 END SFB_HELP_JSON_DATA_TYPE_PROPERTIES_PKG;
 /
+
 create or replace PACKAGE BODY       SFB_HELP_REFRENZ_JSON_FORM_PKG IS 
   /* 
   This is the API for the table SFB_HELP_REFRENZ_JSON_FORM. 
@@ -4750,6 +4753,7 @@ create or replace PACKAGE BODY       SFB_HELP_REFRENZ_JSON_FORM_PKG IS
     p_hrjf_valid_from      IN SFB_HELP_REFRENZ_JSON_FORM.HRJF_VALID_FROM%TYPE        DEFAULT sysdate ,
     p_hrjf_valid_to        IN SFB_HELP_REFRENZ_JSON_FORM.HRJF_VALID_TO%TYPE          DEFAULT TO_DATE('31.12.2999', 'DD.MM.YYYY') ,
     p_hrjf_deleted_yn      IN SFB_HELP_REFRENZ_JSON_FORM.HRJF_DELETED_YN%TYPE        DEFAULT 'NO' ,
+    p_HRJF_ARRAY_YN        IN SFB_HELP_REFRENZ_JSON_FORM.HRJF_ARRAY_YN%TYPE        DEFAULT 'N' ,
     p_hrjf_name            IN SFB_HELP_REFRENZ_JSON_FORM.HRJF_NAME%TYPE               ) 
   IS 
   BEGIN 
@@ -4765,6 +4769,7 @@ create or replace PACKAGE BODY       SFB_HELP_REFRENZ_JSON_FORM_PKG IS
       HRJF_VALID_FROM,
       HRJF_VALID_TO,
       HRJF_DELETED_YN,
+      HRJF_ARRAY_YN,
       HRJF_NAME ) 
     VALUES ( 
       p_hrjf_id,
@@ -4778,6 +4783,7 @@ create or replace PACKAGE BODY       SFB_HELP_REFRENZ_JSON_FORM_PKG IS
       p_hrjf_valid_from,
       p_hrjf_valid_to,
       p_hrjf_deleted_yn,
+      p_HRJF_ARRAY_YN,
       p_hrjf_name ); 
   END create_row;
  
@@ -5329,6 +5335,7 @@ create or replace PACKAGE BODY       SFB_HELP_REFRENZ_JSON_FORM_PKG IS
   END get_default_row;
  
 END SFB_HELP_REFRENZ_JSON_FORM_PKG;
+
 /
 create or replace PACKAGE BODY       SFB_JSON_FORM_PKG IS 
   /* 

@@ -103,7 +103,9 @@ procedure pr_precheck_properties (
 
 
 end SFB_P0001_PKG;
+
 /
+
 create or replace package body SFB_P0001_PKG as
 
 
@@ -167,7 +169,7 @@ BEGIN
                set JSON_USER_SESSION_ID = v('APP_SESSION')
              where JSON_ID = V_JSON_ID
             ;
-            
+
         ELSIF  pi_mode = 'EDIT' THEN
         
             -- read row 
@@ -653,7 +655,7 @@ is
 begin
 
     -- prechecks,
-    SFB_P0001_PKG.pr_precheck_properties(pi_JSON_ID,'LABEL');   -- insert label, if not exists
+    SFB_P0001_PKG.pr_precheck_properties(pi_JSON_ID,'LABEL');   -- insert label, if not exists  
     SFB_P0001_PKG.pr_precheck_properties(pi_JSON_ID,'COLSPAN'); -- insert label, if not exists
 
     -- get requried attributes
@@ -764,6 +766,9 @@ is
     v_json_string                       clob;
     v_bracket                           varchar2(4000);
     v_max_loop                          number;
+    v_HRJF_ARRAY_YN                     varchar2(4000);
+    v_array_part_Start                  varchar2(4000);
+    v_array_part_end                    varchar2(4000);
 
 
 begin
@@ -782,6 +787,7 @@ begin
                             , R.JSON_NAME                               as REF_JSON_NAME
                             , REPLACE(R.JSON_NAME, ' ', '_')            as REF_JSON_NAME_UNDERLINE
                             , REGEXP_REPLACE(INITCAP(REPLACE(HRJF_NAME, ' ', '_')), '[^A-Za-z0-9]', '')                                  as HRJF_NAME
+                            , HRJF_ARRAY_YN                             as HRJF_ARRAY_YN
                          from SFB_JSON_FORM M
                          join SFB_HELP_REFRENZ_JSON_FORM on (M.JSON_ID = HRJF_MAIN_JSON_FK)
                          join SFB_JSON_FORM R            on (R.JSON_ID =HRJF_REFRENZ_JSON_FK )
@@ -795,7 +801,8 @@ begin
         v_REF_JSON_NAME_UNDERLINE           := l_ref_form.REF_JSON_NAME_UNDERLINE;
         v_rownum                            := v_rownum+1;
         v_HRJF_NAME                         := l_ref_form.HRJF_NAME;
-        
+        v_HRJF_ARRAY_YN                     := l_ref_form.HRJF_ARRAY_YN;
+
         -- set komma, if not null
         if v_json_string is not null then 
             v_json_string   := v_json_string|| ', ';
@@ -808,10 +815,29 @@ begin
             v_bracket := '}';
         end if;
 
-        -- join the string
-       -- v_json_string   := v_json_string||'"'||v_REF_JSON_NAME||'_'||v_rownum||'" : { "$ref": "#/$defs/'||v_REF_JSON_NAME_UNDERLINE||'_'||v_rownum||'"}
-        v_json_string   := v_json_string||'"'||v_HRJF_NAME||'" : { "$ref": "#/$defs/'||v_REF_JSON_NAME_UNDERLINE||'_'||v_rownum||'"}
-        '||v_bracket;
+        
+        if v_HRJF_ARRAY_YN = 'Y' then 
+
+            v_array_part_Start  := '"type": "array", "items": {';
+            v_array_part_end    := '}'; 
+
+            -- join the string
+            -- v_json_string   := v_json_string||'"'||v_REF_JSON_NAME||'_'||v_rownum||'" : { "$ref": "#/$defs/'||v_REF_JSON_NAME_UNDERLINE||'_'||v_rownum||'"}
+            v_json_string   := v_json_string||'"'||v_HRJF_NAME||'" : { '||v_array_part_Start||' "$ref": "#/$defs/'||v_REF_JSON_NAME_UNDERLINE||'_'||v_rownum||'"}
+            '||v_array_part_end||v_bracket;
+
+
+        else
+
+            -- join the string
+            -- v_json_string   := v_json_string||'"'||v_REF_JSON_NAME||'_'||v_rownum||'" : { "$ref": "#/$defs/'||v_REF_JSON_NAME_UNDERLINE||'_'||v_rownum||'"}
+            v_json_string   := v_json_string||'"'||v_HRJF_NAME||'" : { "$ref": "#/$defs/'||v_REF_JSON_NAME_UNDERLINE||'_'||v_rownum||'"}
+            '||v_bracket;
+
+        end if;
+
+
+
 
         
         v_return_value      := v_json_string;
@@ -990,3 +1016,4 @@ end pr_precheck_properties;
 
 end SFB_P0001_PKG;
 /
+ 
