@@ -101,9 +101,15 @@ procedure pr_precheck_properties (
   , pi_type       in  varchar
 );
 
+--==============================================================================
+--  pre check, check some properties, if they are duplicate, then delete
+--==============================================================================
+procedure pr_precheck_duplicate_properties (
+    pi_JSON_ID    in  SFB_JSON_FORM.JSON_ID%type
+  , pi_type       in  varchar
+);
 
 end SFB_P0001_PKG;
-
 /
 
 create or replace package body SFB_P0001_PKG as
@@ -424,13 +430,18 @@ is
     v_return_Value                       clob              := null;
     v_propertiy_name                     varchar2(4000)    := null;
     v_property_value                     varchar2(4000)    := null;
-    v_coma                               varchar2(4000)    := ',';
+    v_coma                               varchar2(4000)    := ',';   
+    v_quotation_marks                    varchar2(4000)    := null;
+    v_ATTR_NAME                          varchar2(4000);
+    v_array_part_Start                   varchar2(4000);    
+    v_array_part_end                     varchar2(4000);    
 
 begin
 
     -- loop all properties
     for l_attributes in (select property_name          as property_name
                               , property_value         as property_value
+                              , ATTR_NAME              as ATTR_NAME
                            from SFB_PROPERTIES_V
                           where HJDP_HFAT_FK           = pi_HFAT_ID 
                             and PROP_TYPE = 'JSON'
@@ -441,6 +452,7 @@ begin
         -- save variable
         v_propertiy_name            := l_attributes.property_name;
         v_property_value            := l_attributes.property_value;     
+        v_ATTR_NAME                 := l_attributes.ATTR_NAME;     
 
 
         -- set komma, if not null
@@ -448,18 +460,36 @@ begin
             v_json_string   := v_json_string|| ', ';
         end if;
 
+
+        if lower(v_ATTR_NAME) = ('array') then 
+
+           v_array_part_Start := '"items": { "type": "string",';
+           v_array_part_end := '}'; 
+
+        end if;
+
+        if lower(v_propertiy_name) in ('maxlength','minimum') then 
+
+            v_quotation_marks := null;
+        else
+
+            v_quotation_marks := '"'; 
+
+        end if; 
+
+
         if v_propertiy_name = 'enum' then 
 
             -- replace comma '","', 
             v_property_value := '["' || REPLACE(TRIM(v_property_value), ', ', '","') || '"]';
             
             -- join the string
-            v_json_string   := v_json_string||'"'||v_propertiy_name||'" :'||v_property_value||'';
+            v_json_string   := v_json_string||v_array_part_Start||'"'||v_propertiy_name||'" :'||v_property_value||v_array_part_end;
 
         else
 
             -- join the string
-            v_json_string   := v_json_string||'"'||v_propertiy_name||'" : "'||v_property_value||'"';
+            v_json_string   := v_json_string||v_array_part_Start||'"'||v_propertiy_name||'" : '||v_quotation_marks||v_property_value||v_array_part_end||v_quotation_marks;
 
         end if;
  
@@ -485,10 +515,18 @@ begin
             v_json_string_apex   := v_json_string_apex|| ', ';
         end if; 
 
-        
 
+        if lower(v_propertiy_name) in ('colspan') then 
+
+            v_quotation_marks := null;
+        else
+
+            v_quotation_marks := '"'; 
+
+        end if; 
+ 
         -- join the string
-        v_json_string_apex   := v_json_string_apex||'"'||v_propertiy_name||'": "'||v_property_value||'"';
+        v_json_string_apex   := v_json_string_apex||'"'||v_propertiy_name||'": '||v_quotation_marks||v_property_value||v_quotation_marks;
  
     end loop;
 
@@ -549,6 +587,7 @@ is
     -- properties
     v_properties_string                      clob;
     v_HFAT_ID                                number;
+    
 begin
 
 
@@ -624,7 +663,7 @@ begin
 
         -- join the string
         v_json_string   := v_json_string||'
-     "'||v_field_name||'":'||v_line_space||'{ '||v_Attribute_name||' '||v_properties_string||'}';
+     "'||v_field_name||'":'||v_line_space||'{  '||v_Attribute_name||' '||v_properties_string||'}';
     -- "'||v_field_name||'":'||v_line_space||'{ "type": "'||v_Attribute_name||'"'||v_properties_string||'}';
 
 
@@ -657,6 +696,7 @@ begin
     -- prechecks,
     SFB_P0001_PKG.pr_precheck_properties(pi_JSON_ID,'LABEL');   -- insert label, if not exists  
     SFB_P0001_PKG.pr_precheck_properties(pi_JSON_ID,'COLSPAN'); -- insert label, if not exists
+    SFB_P0001_PKG.pr_precheck_duplicate_properties(pi_JSON_ID,'DUPLICATE'); -- delete duplicate properties
 
     -- get requried attributes
     v_required_attributes           := SFB_P0001_PKG.fn_get_required_attributes(pi_JSON_ID);
@@ -1006,14 +1046,79 @@ begin
             ); 
  
 
-        end if; 
- 
-    
+        end if;  
+
     END LOOP;
 
 end pr_precheck_properties;
 
 
+--==============================================================================
+--  pre check, check some properties, if they are duplicate, then delete
+--==============================================================================
+procedure pr_precheck_duplicate_properties (
+    pi_JSON_ID    in  SFB_JSON_FORM.JSON_ID%type
+  , pi_type       in  varchar
+)
+
+is
+
+    V_JSON_ID               SFB_JSON_FORM.JSON_ID%TYPE   := pi_JSON_ID; 
+    v_PROP_ID               number;
+    v_HJDP_ID               number;
+    V_HJDP_RESULT           SFB_HELP_JSON_DATA_TYPE_PROPERTIES%ROWTYPE; 
+
+begin
+    for l_duplicate_properties in (select PROP_ID                              as  PROP_ID
+                                     from SFB_JSON_FORM
+                                     join SFB_HELP_FORM_ATTRIBUTES             on HFAT_JASON_FK = JSON_ID
+                                     join SFB_HELP_JSON_DATA_TYPE_PROPERTIES   on HFAT_ID = HJDP_HFAT_FK
+                                     join SFB_PROPERTIES                       on PROP_ID = HJDP_PROP_FK 
+                                    where JSON_ID = v_json_id 
+                                    group by HFAT_ID, PROP_ID
+                                   having count(*) >= 2
+                                   )
+    loop
+
+        v_PROP_ID       := l_duplicate_properties.PROP_ID;
+
+        -- create second loop:
+        for l_del_duplicate_properties in  (select HJDP_ID                              as HJDP_ID
+                                              from SFB_JSON_FORM
+                                              join SFB_HELP_FORM_ATTRIBUTES             on HFAT_JASON_FK = JSON_ID
+                                              join SFB_HELP_JSON_DATA_TYPE_PROPERTIES   on HFAT_ID = HJDP_HFAT_FK
+                                              join SFB_PROPERTIES                       on PROP_ID = HJDP_PROP_FK 
+                                             where JSON_ID = v_json_id 
+                                               and PROP_ID = v_PROP_ID
+                                            offset 1 row
+                                          )
+        loop
+ 
+            -- save value
+            v_HJDP_ID       := l_del_duplicate_properties.HJDP_ID;
+
+            -- delete 
+            -- read row 
+            V_HJDP_RESULT := SFB_HELP_JSON_DATA_TYPE_PROPERTIES_PKG.read_row( 
+                                p_hjdp_id   => v_HJDP_ID 
+                             ); 
+
+            -- Update Single row 
+            V_HJDP_RESULT.hjdp_deleted_yn       := 'YES';                                                                                     
+            V_HJDP_RESULT.hjdp_remark           := 'duplicate properties is deleted.';  
+
+            -- update row 
+                SFB_HELP_JSON_DATA_TYPE_PROPERTIES_PKG.update_row( 
+                    p_row => V_HJDP_RESULT 
+                ); 
+
+        end loop;
+    
+    end loop; 
+    
+end pr_precheck_duplicate_properties; 
+
+
+
 end SFB_P0001_PKG;
 /
- 

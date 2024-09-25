@@ -1,4 +1,4 @@
-create or replace package SBF_P0201_PKG as
+create or replace package SFB_P0201_PKG as
 
 
 PROCEDURE GET_PROPERTIES(  
@@ -20,9 +20,9 @@ PROCEDURE GET_PROPERTIES(
     , pi_prop_deleted_yn   IN SFB_PROPERTIES.prop_DELETED_YN%TYPE default null
     );
 
-end SBF_P0201_PKG;
+end SFB_P0201_PKG;
 /
-create or replace package body SBF_P0201_PKG as
+create or replace package body SFB_P0201_PKG as
 
 PROCEDURE GET_PROPERTIES(  
     pio_prop_id             IN OUT SFB_PROPERTIES.PROP_ID%TYPE  
@@ -137,5 +137,5 @@ END GET_PROPERTIES;
     END SET_PROPERTIES;
     
 
-end SBF_P0201_PKG;
+end SFB_P0201_PKG;
 /

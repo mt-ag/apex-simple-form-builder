@@ -1,4 +1,3 @@
-prompt -- Deinstall Supporting Objects
 drop sequence SFB_ATTR_SEQ;
 drop sequence SFB_HEAP_SEQ;
 drop sequence SFB_HFAT_SEQ;
@@ -25,8 +24,8 @@ drop view SFB_P0200_PROPERTIES_V;
 drop view SFB_P0610_REFRENCED_FORM_V;
 drop view SFB_PROPERTIES_V;
 
-drop package SBF_P0201_PKG;
-drop package SBF_P0610_PKG;
+drop package SFB_P0201_PKG;
+drop package SFB_P0610_PKG;
 drop package SFB_ATTRIBUTES_PKG;
 drop package SFB_HELP_ATTRIBUTES_PROPERTIES_REL_PKG;
 drop package SFB_HELP_FORM_ATTRIBUTES_PKG;
@@ -37,4 +36,3 @@ drop package SFB_P0101_PKG;
 drop package SFB_PROPERTIES_PKG;  
 drop package SFB_P0001_PKG;  
 
-prompt  ...done

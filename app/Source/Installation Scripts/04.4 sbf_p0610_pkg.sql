@@ -1,12 +1,12 @@
-create or replace package SBF_P0610_PKG as
+create or replace package SFB_P0610_PKG as
 
 PROCEDURE pr_delete_form(  
     pi_JSON_ID            IN OUT SFB_JSON_FORM.JSON_ID%TYPE   
 );
  
-end SBF_P0610_PKG;
+end SFB_P0610_PKG;
 /
-create or replace package body SBF_P0610_PKG as
+create or replace package body SFB_P0610_PKG as
 
 PROCEDURE pr_delete_form(  
     pi_JSON_ID            IN OUT SFB_JSON_FORM.JSON_ID%TYPE   
@@ -79,5 +79,5 @@ begin
 
 end pr_delete_form;
  
-end SBF_P0610_PKG;
+end SFB_P0610_PKG;
 /

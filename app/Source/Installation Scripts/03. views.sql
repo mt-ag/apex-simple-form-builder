@@ -92,15 +92,17 @@ left join SFB_HELP_FORM_ATTRIBUTES
   where HRJF_DELETED_YN = 'NO'
    and ref_json.JSON_DELETED_YN = 'NO';
 
-  CREATE OR REPLACE FORCE EDITIONABLE VIEW "SFB_PROPERTIES_V" ("V_ROWNUM", "PROPERTY_NAME", "PROPERTY_VALUE", "HJDP_HFAT_FK", "PROP_TYPE") AS 
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "SFB_PROPERTIES_V" ("V_ROWNUM", "PROPERTY_NAME", "PROPERTY_VALUE", "HJDP_HFAT_FK", "PROP_TYPE", "ATTR_NAME") AS 
   select rownum                          as v_rownum
                                 , PROP_RETURN_VALUE               as property_name
                                 , HJDP_NAME                       as property_value
                                 , HJDP_HFAT_FK                    as HJDP_HFAT_FK
-                                , PROP_TYPE                       as PROP_TYPE        
+                                , PROP_TYPE                       as PROP_TYPE   
+                                , ATTR_NAME                       as ATTR_NAME       
                              from SFB_HELP_FORM_ATTRIBUTES
                              join SFB_HELP_JSON_DATA_TYPE_PROPERTIES  on (HFAT_ID = HJDP_HFAT_FK)
                              join SFB_PROPERTIES                      on (PROP_ID = HJDP_PROP_FK)
+                             join SFB_ATTRIBUTES                      on (ATTR_ID = HFAT_ATTR_FK)
                              where HFAT_DELETED_YN = 'NO'
                                and HJDP_DELETED_YN = 'NO'
                                and PROP_DELETED_YN = 'NO';

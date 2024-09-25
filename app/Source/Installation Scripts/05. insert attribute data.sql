@@ -29,4 +29,4 @@ INSERT INTO SFB_ATTRIBUTES (ATTR_NAME, ATTR_RETURN_VALUE, ATTR_TYPE) VALUES
 ('URL-Link', '"type": "string", "format": "url"', 'format');
 
 INSERT INTO SFB_ATTRIBUTES (ATTR_NAME, ATTR_RETURN_VALUE, ATTR_TYPE) VALUES
-('Array', '"type": "Array"', 'type');
+('Array', '"type": "array"', 'type');

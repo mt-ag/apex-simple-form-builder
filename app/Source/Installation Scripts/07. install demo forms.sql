@@ -31,6 +31,7 @@ BEGIN
       into v_prop_id_dd 
       from SFB_PROPERTIES 
      where lower(PROP_NAME) = lower('enum') 
+       and PROP_TYPE = 'JSON'
     ; 
 
     select PROP_ID 
