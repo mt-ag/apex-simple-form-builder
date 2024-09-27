@@ -112,6 +112,7 @@ procedure pr_precheck_duplicate_properties (
 end SFB_P0001_PKG;
 /
 
+
 create or replace package body SFB_P0001_PKG as
 
 

@@ -5,7 +5,8 @@ PROCEDURE GET_ATTRIBUTES (
   , po_attr_name            OUT     SFB_ATTRIBUTES.ATTR_NAME%TYPE 
   , po_attr_return_value    OUT     SFB_ATTRIBUTES.ATTR_RETURN_VALUE%TYPE 
   , po_attr_type            OUT     SFB_ATTRIBUTES.ATTR_TYPE%TYPE 
-  , po_attr_remark          OUT     SFB_ATTRIBUTES.ATTR_REMARK%TYPE 
+  , po_attr_remark          OUT     SFB_ATTRIBUTES.ATTR_REMARK%TYPE  
+  , po_ATTR_HELP_TEXT       OUT     SFB_ATTRIBUTES.ATTR_HELP_TEXT%TYPE 
   --, po_attr_created         OUT ATTRIBUTES.ATTR_CREATED%TYPE 
   --, po_attr_created_by      OUT ATTRIBUTES.ATTR_CREATED_BY%TYPE 
   --, po_attr_updated         OUT ATTRIBUTES.ATTR_UPDATED%TYPE 
@@ -23,6 +24,7 @@ PROCEDURE GET_ATTRIBUTES (
     , pi_attr_return_value IN SFB_ATTRIBUTES.ATTR_RETURN_VALUE%TYPE default null  
     , pi_attr_type         IN SFB_ATTRIBUTES.ATTR_TYPE%TYPE default null  
     , pi_attr_remark       IN SFB_ATTRIBUTES.ATTR_REMARK%TYPE default null 
+    , pi_ATTR_HELP_TEXT    IN SFB_ATTRIBUTES.ATTR_HELP_TEXT%TYPE default null 
     --, pi_attr_created      IN ATTRIBUTES.ATTR_CREATED%TYPE default null 
     --, pi_attr_created_by   IN ATTRIBUTES.ATTR_CREATED_BY%TYPE default null 
     --, pi_attr_updated      IN ATTRIBUTES.ATTR_UPDATED%TYPE default null 
@@ -36,6 +38,7 @@ PROCEDURE GET_ATTRIBUTES (
 
 end SFB_P0101_PKG;
 /
+
 create or replace package body SFB_P0101_PKG as
 
 PROCEDURE GET_ATTRIBUTES (  
@@ -44,6 +47,7 @@ PROCEDURE GET_ATTRIBUTES (
   , po_attr_return_value    OUT SFB_ATTRIBUTES.ATTR_RETURN_VALUE%TYPE 
   , po_attr_type            OUT SFB_ATTRIBUTES.ATTR_TYPE%TYPE 
   , po_attr_remark          OUT SFB_ATTRIBUTES.ATTR_REMARK%TYPE 
+  , po_ATTR_HELP_TEXT       OUT SFB_ATTRIBUTES.ATTR_HELP_TEXT%TYPE
   --, po_attr_created         OUT ATTRIBUTES.ATTR_CREATED%TYPE 
   --, po_attr_created_by      OUT ATTRIBUTES.ATTR_CREATED_BY%TYPE 
   --, po_attr_updated         OUT ATTRIBUTES.ATTR_UPDATED%TYPE 
@@ -69,6 +73,7 @@ PROCEDURE GET_ATTRIBUTES (
      po_attr_return_value  := V_ATTR_RESULT.attr_return_value;                                        
      po_attr_type          := V_ATTR_RESULT.attr_type;                                
      po_attr_remark        := V_ATTR_RESULT.attr_remark;                                    
+     po_ATTR_HELP_TEXT        := V_ATTR_RESULT.ATTR_HELP_TEXT;                                    
      --po_attr_created       := V_ATTR_RESULT.attr_created;                                    
      --po_attr_created_by    := V_ATTR_RESULT.attr_created_by;                                        
      --po_attr_updated       := V_ATTR_RESULT.attr_updated;                                    
@@ -87,6 +92,7 @@ PROCEDURE GET_ATTRIBUTES (
     , pi_attr_return_value IN SFB_ATTRIBUTES.ATTR_RETURN_VALUE%TYPE default null  
     , pi_attr_type         IN SFB_ATTRIBUTES.ATTR_TYPE%TYPE default null  
     , pi_attr_remark       IN SFB_ATTRIBUTES.ATTR_REMARK%TYPE default null  
+    , pi_ATTR_HELP_TEXT    IN SFB_ATTRIBUTES.ATTR_HELP_TEXT%TYPE default null 
     --, pi_attr_created      IN ATTRIBUTES.ATTR_CREATED%TYPE default null 
     --, pi_attr_created_by   IN ATTRIBUTES.ATTR_CREATED_BY%TYPE default null 
     --, pi_attr_updated      IN ATTRIBUTES.ATTR_UPDATED%TYPE default null 
@@ -113,6 +119,11 @@ PROCEDURE GET_ATTRIBUTES (
 
             pio_attr_id := V_ATTR_ID;
 
+            update SFB_ATTRIBUTES 
+               set ATTR_HELP_TEXT = pi_ATTR_HELP_TEXT
+             where attr_id = V_ATTR_ID
+            ;
+
         ELSIF  pi_mode = 'EDIT' THEN
         
             -- read row 
@@ -132,6 +143,11 @@ PROCEDURE GET_ATTRIBUTES (
                 ); 
 
             pio_attr_id := V_ATTR_ID;
+
+            update SFB_ATTRIBUTES 
+               set ATTR_HELP_TEXT = pi_ATTR_HELP_TEXT
+             where attr_id = V_ATTR_ID
+            ;
 
 
         ELSIF  pi_mode = 'DELETE' THEN

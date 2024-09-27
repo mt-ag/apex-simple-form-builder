@@ -27,6 +27,7 @@
 	"ATTR_RETURN_VALUE" VARCHAR2(4000) NOT NULL ENABLE, 
 	"ATTR_TYPE" VARCHAR2(4000) DEFAULT 'type', 
 	"ATTR_REMARK" VARCHAR2(4000), 
+	"ATTR_HELP_TEXT" CLOB default 'No help text is available at the moment, but it will be updated shortly.', 
 	"ATTR_CREATED" TIMESTAMP (6) DEFAULT sysdate NOT NULL ENABLE, 
 	"ATTR_CREATED_BY" VARCHAR2(4000) DEFAULT ( coalesce(sys_context('apex$session', 'app_user'), 
                                                            sys_context('userenv', 'os_user'), 
@@ -136,6 +137,7 @@
 	"PROP_RETURN_VALUE" VARCHAR2(4000) NOT NULL ENABLE, 
 	"PROP_TYPE" VARCHAR2(2000) NOT NULL ENABLE, 
 	"PROP_REMARK" VARCHAR2(4000), 
+	"PROP_HELP_TEXT" CLOB default 'No help text is available at the moment, but it will be updated shortly.', 
 	"PROP_CREATED" TIMESTAMP (6) DEFAULT sysdate NOT NULL ENABLE, 
 	"PROP_CREATED_BY" VARCHAR2(4000) DEFAULT ( coalesce(sys_context('apex$session', 'app_user'), 
                                                            sys_context('userenv', 'os_user'), 
@@ -167,3 +169,23 @@
 	  REFERENCES "SFB_JSON_FORM" ("JSON_ID") ENABLE;
   ALTER TABLE "SFB_HELP_REFRENZ_JSON_FORM" ADD CONSTRAINT "HRJF_REFRENZ_JSON_FK" FOREIGN KEY ("HRJF_REFRENZ_JSON_FK")
 	  REFERENCES "SFB_JSON_FORM" ("JSON_ID") ENABLE;
+
+
+
+      CREATE TABLE SFB_HELP_TEXT 
+   (	
+	HETE_ID NUMBER DEFAULT SFB_HETE_SEQ.NEXTVAL NOT NULL ENABLE, 
+	HETE_TEXT CLOB NOT NULL, 
+	HETE_TEXT_SQL CLOB , 
+	HETE_CREATED TIMESTAMP (6) DEFAULT sysdate NOT NULL ENABLE, 
+	HETE_CREATED_BY VARCHAR2(4000) DEFAULT ( coalesce(sys_context('apex$session', 'app_user'), 
+                                                           sys_context('userenv', 'os_user'), 
+                                                           sys_context('userenv', 'session_user')) ) NOT NULL ENABLE, 
+	HETE_UPDATED TIMESTAMP (6) DEFAULT sysdate NOT NULL ENABLE, 
+	HETE_UPDATED_BY VARCHAR2(4000) DEFAULT ( coalesce(sys_context('apex$session', 'app_user'), 
+                                                           sys_context('userenv', 'os_user'), 
+                                                           sys_context('userenv', 'session_user')) ) NOT NULL ENABLE, 
+	HETE_VALID_FROM TIMESTAMP (6) DEFAULT sysdate NOT NULL ENABLE, 
+	HETE_VALID_TO TIMESTAMP (6) DEFAULT TO_DATE('31.12.2999', 'DD.MM.YYYY') NOT NULL ENABLE, 
+	HETE_DELETED_YN VARCHAR2(4) DEFAULT 'NO' NOT NULL ENABLE
+);
