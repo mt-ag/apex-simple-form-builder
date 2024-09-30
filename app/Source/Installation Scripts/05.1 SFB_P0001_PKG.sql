@@ -109,6 +109,11 @@ procedure pr_precheck_duplicate_properties (
   , pi_type       in  varchar
 );
 
+--==============================================================================
+--  install example
+--==============================================================================
+procedure pr_install_example;
+
 end SFB_P0001_PKG;
 /
 
@@ -1119,6 +1124,597 @@ begin
     
 end pr_precheck_duplicate_properties; 
 
+--==============================================================================
+--  install example
+--==============================================================================
+procedure pr_install_example
+
+is
+    V_JSON_ID               NUMBER;
+    V_ATTR_ID_STRING        NUMBER;
+    V_ATTR_ID_BOOLEAN       NUMBER;
+    V_ATTR_ID_ARRY          NUMBER;
+    V_ATTR_ID_INTEGER       NUMBER;
+    V_ATTR_ID_ONLY_DATE     NUMBER; 
+    V_ATTR_ID_DATE_TIME     NUMBER; 
+    V_ATTR_ID_URL           NUMBER; 
+
+
+
+    v_prop_id_ENUM                  NUMBER; 
+    v_prop_id_MAXLENGHT             NUMBER; 
+    v_prop_id_MAXIMUM               NUMBER; 
+    v_prop_id_MINIMUM               NUMBER; 
+    v_prop_id_FORMAT                NUMBER; 
+    v_prop_id_ITEMTYPE              NUMBER;  
+    v_prop_id_TEXTCASE              NUMBER;  
+    v_prop_id_PLACEHOLDER           NUMBER;
+    v_prop_id_LINES                 NUMBER;
+
+    V_HFAT_ID               NUMBER;
+    v_hjdp_id               number;
+    v_counter               varchar(4000) := '('||SFB_JSON_SEQ.NEXTVAL||')';
+    v_json_id_emp_form      number;
+    v_json_id_feedback_form number;
+begin
+
+
+  -- FORM ATTRIBUTES
+
+    -- Attribute für 'String' holen
+    SELECT ATTR_ID INTO V_ATTR_ID_STRING
+    FROM SFB_ATTRIBUTES
+    WHERE lower(ATTR_NAME) = 'string';  
+
+
+    
+    SELECT ATTR_ID INTO V_ATTR_ID_BOOLEAN
+    FROM SFB_ATTRIBUTES
+    WHERE lower(ATTR_NAME) = 'boolean'; 
+
+    
+    SELECT ATTR_ID INTO V_ATTR_ID_INTEGER
+    FROM SFB_ATTRIBUTES
+    WHERE lower(ATTR_NAME) = 'integer'; 
+
+    
+    SELECT ATTR_ID INTO V_ATTR_ID_ONLY_DATE
+    FROM SFB_ATTRIBUTES
+    WHERE lower(ATTR_NAME) = 'only date'; 
+
+    SELECT ATTR_ID INTO V_ATTR_ID_ARRY
+    FROM SFB_ATTRIBUTES
+    WHERE lower(ATTR_NAME) = 'array'; 
+
+    SELECT ATTR_ID INTO V_ATTR_ID_URL
+    FROM SFB_ATTRIBUTES
+    WHERE lower(ATTR_NAME) = lower('URL-Link'); 
+
+    
+    SELECT ATTR_ID INTO V_ATTR_ID_DATE_TIME
+    FROM SFB_ATTRIBUTES
+    WHERE lower(ATTR_NAME) = lower('Date with Time'); 
+
+
+
+
+
+          
+           
+
+    -- FORM PROPERTIES
+    select PROP_ID 
+      into v_prop_id_ENUM 
+      from SFB_PROPERTIES 
+     where lower(PROP_NAME) = lower('enum') 
+       and PROP_TYPE = 'JSON'
+    ; 
+
+    select PROP_ID 
+      into v_prop_id_MAXLENGHT 
+      from SFB_PROPERTIES 
+     where lower(PROP_NAME) = lower('maxlength') 
+       and PROP_TYPE = 'JSON'
+    ; 
+
+    select PROP_ID 
+      into v_prop_id_MAXIMUM 
+      from SFB_PROPERTIES 
+     where lower(PROP_NAME) = lower('maximum') 
+       and PROP_TYPE = 'JSON'
+    ; 
+
+    select PROP_ID 
+      into v_prop_id_MINIMUM 
+      from SFB_PROPERTIES 
+     where lower(PROP_NAME) = lower('minimum') 
+       and PROP_TYPE = 'JSON'
+    ; 
+
+    select PROP_ID 
+      into v_prop_id_ITEMTYPE 
+      from SFB_PROPERTIES 
+     where lower(PROP_NAME) = lower('itemtype') 
+       and PROP_TYPE = 'APEX'
+    ; 
+
+    select PROP_ID 
+      into v_prop_id_FORMAT 
+      from SFB_PROPERTIES 
+     where lower(PROP_NAME) = lower('format') 
+       and PROP_TYPE = 'JSON'
+    ; 
+
+    select PROP_ID 
+      into v_prop_id_TEXTCASE 
+      from SFB_PROPERTIES 
+     where lower(PROP_NAME) = lower('textcase') 
+       and PROP_TYPE = 'APEX'
+    ; 
+
+    select PROP_ID 
+      into v_prop_id_PLACEHOLDER 
+      from SFB_PROPERTIES 
+     where lower(PROP_NAME) = lower('placeholder') 
+       and PROP_TYPE = 'APEX'
+    ; 
+
+    select PROP_ID 
+      into v_prop_id_LINES 
+      from SFB_PROPERTIES 
+     where lower(PROP_NAME) = lower('lines') 
+       and PROP_TYPE = 'APEX'
+    ; 
+
+
+-- ========================================================================================
+-- ========================================================================================
+-- ========================================================================================
+
+    -- Formular erstellen: Employee Registration Form
+    V_JSON_ID := SFB_JSON_FORM_PKG.CREATE_ROW(
+                    p_json_name           => 'Employee Registration Form '|| v_counter,
+                    p_json_code           => NULL,
+                    p_json_remark         => 'Form to register new employees'
+                );
+
+    -- update session
+    update SFB_JSON_FORM
+       set JSON_USER_SESSION_ID = v('APP_SESSION')
+     where JSON_ID = V_JSON_ID
+    ;
+
+    v_json_id_emp_form := V_JSON_ID;
+
+    V_HFAT_ID    := null;
+    -- Formularattribute setzen
+    SFB_P0001_PKG.SET_HELP_FORM_ATTRIBUTES(
+        pio_hfat_id             => V_HFAT_ID,
+        pi_mode                 => 'NEW',
+        pi_hfat_attr_fk         => V_ATTR_ID_STRING,
+        pi_hfat_jason_fk        => V_JSON_ID,
+        pi_hfat_name            => 'Employee Name',
+        pi_hfat_required_yn     => 'Y' 
+    );
+
+    V_HFAT_ID    := null;
+    -- Formularattribute setzen
+    SFB_P0001_PKG.SET_HELP_FORM_ATTRIBUTES(
+        pio_hfat_id             => V_HFAT_ID,
+        pi_mode                 => 'NEW',
+        pi_hfat_attr_fk         => V_ATTR_ID_STRING,
+        pi_hfat_jason_fk        => V_JSON_ID,
+        pi_hfat_name            => 'E-mail:',
+        pi_hfat_required_yn     => 'N' 
+    );
+    
+        v_hjdp_id   := null;
+        SFB_P0001_PKG.SET_HELP_JSON_DATA_TYPE_PROPERTIES( 
+                pio_hjdp_id             => v_hjdp_id
+              , pi_mode                 => 'NEW'
+              , pi_hjdp_name            => 'email'
+              , pi_hjdp_hfat_fk         => V_HFAT_ID
+              , pi_hjdp_prop_fk         => v_prop_id_FORMAT
+            ); 
+
+
+    V_HFAT_ID    := null;
+    -- Formularattribute setzen
+    SFB_P0001_PKG.SET_HELP_FORM_ATTRIBUTES(
+        pio_hfat_id             => V_HFAT_ID,
+        pi_mode                 => 'NEW',
+        pi_hfat_attr_fk         => V_ATTR_ID_STRING,
+        pi_hfat_jason_fk        => V_JSON_ID,
+        pi_hfat_name            => 'Job Title',
+        pi_hfat_required_yn     => 'Y' 
+    );
+
+
+        v_hjdp_id   := null;
+        SFB_P0001_PKG.SET_HELP_JSON_DATA_TYPE_PROPERTIES( 
+                pio_hjdp_id             => v_hjdp_id
+              , pi_mode                 => 'NEW'
+              , pi_hjdp_name            => 'Software Engineer, Project Manager, Data Analyst, Human Resources Manager, Marketing Director'
+              , pi_hjdp_hfat_fk         => V_HFAT_ID
+              , pi_hjdp_prop_fk         => v_prop_id_ENUM
+            ); 
+
+
+        SFB_P0001_PKG.SET_HELP_FORM_ATTRIBUTES(
+        pio_hfat_id             => V_HFAT_ID,
+        pi_mode                 => 'NEW',
+        pi_hfat_attr_fk         => V_ATTR_ID_ARRY,
+        pi_hfat_jason_fk        => V_JSON_ID,
+        pi_hfat_name            => 'Employee Status',
+        pi_hfat_required_yn     => 'Y' 
+    );
+
+        v_hjdp_id   := null;
+        SFB_P0001_PKG.SET_HELP_JSON_DATA_TYPE_PROPERTIES( 
+                pio_hjdp_id             => v_hjdp_id
+              , pi_mode                 => 'NEW'
+              , pi_hjdp_name            => 'Active, Inactive, On Leave'
+              , pi_hjdp_hfat_fk         => V_HFAT_ID
+              , pi_hjdp_prop_fk         => v_prop_id_ENUM
+            ); 
+
+    SFB_P0001_PKG.pr_create_json (
+    pi_JSON_ID    => V_JSON_ID
+    );
+
+-- ========================================================================================
+-- ========================================================================================
+-- ========================================================================================
+
+    -- Create a form: Feedback Form
+    V_JSON_ID := SFB_JSON_FORM_PKG.CREATE_ROW(
+                    p_json_name           => 'Feedback Form '|| v_counter,
+                    p_json_code           => NULL,
+                    p_json_remark         => 'Form to collect customer feedback'
+                );
+
+    -- update session
+    update SFB_JSON_FORM
+       set JSON_USER_SESSION_ID = v('APP_SESSION')
+     where JSON_ID = V_JSON_ID
+    ;
+    -- create ref form
+    SFB_HELP_REFRENZ_JSON_FORM_PKG.create_row (   
+       p_hrjf_main_json_fk          => v_json_id_emp_form
+     , p_hrjf_refrenz_json_fk       => V_JSON_ID 
+     , p_hrjf_name                  => 'Employee Engagement Feedback'
+    );  
+
+
+    -- Set form attributes: Feedback Type
+    V_HFAT_ID    := null;
+    SFB_P0001_PKG.SET_HELP_FORM_ATTRIBUTES(
+        pio_hfat_id             => V_HFAT_ID,
+        pi_mode                 => 'NEW',
+        pi_hfat_attr_fk         => V_ATTR_ID_STRING,
+        pi_hfat_jason_fk        => V_JSON_ID,
+        pi_hfat_name            => 'Feedback Type',
+        pi_hfat_required_yn     => 'Y'
+    );
+
+
+    -- Set form attributes: Feedback Date
+    V_HFAT_ID    := null;
+    SFB_P0001_PKG.SET_HELP_FORM_ATTRIBUTES(
+        pio_hfat_id             => V_HFAT_ID,
+        pi_mode                 => 'NEW',
+        pi_hfat_attr_fk         => V_ATTR_ID_ONLY_DATE,
+        pi_hfat_jason_fk        => V_JSON_ID,
+        pi_hfat_name            => 'Feedback Date',
+        pi_hfat_required_yn     => 'Y'
+    ); 
+
+    -- Set form attributes: Feedback Rating
+    V_HFAT_ID    := null;
+    SFB_P0001_PKG.SET_HELP_FORM_ATTRIBUTES(
+        pio_hfat_id             => V_HFAT_ID,
+        pi_mode                 => 'NEW',
+        pi_hfat_attr_fk         => V_ATTR_ID_INTEGER,
+        pi_hfat_jason_fk        => V_JSON_ID,
+        pi_hfat_name            => 'Feedback Rating',
+        pi_hfat_required_yn     => 'N'
+    );
+
+        v_hjdp_id   := null;
+        SFB_P0001_PKG.SET_HELP_JSON_DATA_TYPE_PROPERTIES( 
+                pio_hjdp_id             => v_hjdp_id
+              , pi_mode                 => 'NEW'
+              , pi_hjdp_name            => 'starrating'
+              , pi_hjdp_hfat_fk         => V_HFAT_ID
+              , pi_hjdp_prop_fk         => v_prop_id_ITEMTYPE
+            ); 
+
+        v_hjdp_id   := null;
+        SFB_P0001_PKG.SET_HELP_JSON_DATA_TYPE_PROPERTIES( 
+                pio_hjdp_id             => v_hjdp_id
+              , pi_mode                 => 'NEW'
+              , pi_hjdp_name            => '5'
+              , pi_hjdp_hfat_fk         => V_HFAT_ID
+              , pi_hjdp_prop_fk         => v_prop_id_MAXIMUM
+            ); 
+
+
+    SFB_P0001_PKG.pr_create_json (
+    pi_JSON_ID    => V_JSON_ID
+    );
+
+-- ========================================================================================
+-- ========================================================================================
+-- ========================================================================================
+    -- Formular erstellen: Bank Information Form
+    V_JSON_ID := SFB_JSON_FORM_PKG.CREATE_ROW(
+                    p_json_name           => 'Bank Information Form '|| v_counter,
+                    p_json_code           => NULL,
+                    p_json_remark         => 'Form to collect bank account details'
+                );
+
+        -- update session
+    update SFB_JSON_FORM
+       set JSON_USER_SESSION_ID = v('APP_SESSION')
+     where JSON_ID = V_JSON_ID
+    ;
+
+   -- create ref form
+    SFB_HELP_REFRENZ_JSON_FORM_PKG.create_row (   
+       p_hrjf_main_json_fk          => v_json_id_emp_form
+     , p_hrjf_refrenz_json_fk       => V_JSON_ID
+     , p_hrjf_name                  => 'Salary Disbursement Account'
+    );  
+
+   -- create ref form
+    SFB_HELP_REFRENZ_JSON_FORM_PKG.create_row (   
+       p_hrjf_main_json_fk          => v_json_id_emp_form
+     , p_hrjf_refrenz_json_fk       => V_JSON_ID
+     , p_hrjf_name                  => 'Private account'
+    );  
+
+   -- create ref form
+    SFB_HELP_REFRENZ_JSON_FORM_PKG.create_row (   
+       p_hrjf_main_json_fk          => v_json_id_emp_form
+     , p_hrjf_refrenz_json_fk       => V_JSON_ID
+     , p_hrjf_name                  => 'Savings account'
+    );  
+
+    -- Set form attributes: Bank Name
+    V_HFAT_ID    := null;
+    SFB_P0001_PKG.SET_HELP_FORM_ATTRIBUTES(
+        pio_hfat_id             => V_HFAT_ID,
+        pi_mode                 => 'NEW',
+        pi_hfat_attr_fk         => V_ATTR_ID_string,
+        pi_hfat_jason_fk        => V_JSON_ID,
+        pi_hfat_name            => 'Bank Name',
+        pi_hfat_required_yn     => 'Y'
+    );
+
+    -- Set form attributes: IBAN
+    V_HFAT_ID    := null;
+    SFB_P0001_PKG.SET_HELP_FORM_ATTRIBUTES(
+        pio_hfat_id             => V_HFAT_ID,
+        pi_mode                 => 'NEW',
+        pi_hfat_attr_fk         => V_ATTR_ID_string,
+        pi_hfat_jason_fk        => V_JSON_ID,
+        pi_hfat_name            => 'IBAN',
+        pi_hfat_required_yn     => 'N'
+    );
+
+        v_hjdp_id   := null;
+        SFB_P0001_PKG.SET_HELP_JSON_DATA_TYPE_PROPERTIES( 
+                pio_hjdp_id             => v_hjdp_id
+              , pi_mode                 => 'NEW'
+              , pi_hjdp_name            => '17'
+              , pi_hjdp_hfat_fk         => V_HFAT_ID
+              , pi_hjdp_prop_fk         => v_prop_id_MAXLENGHT
+            ); 
+
+    SFB_P0001_PKG.pr_create_json (
+    pi_JSON_ID    => V_JSON_ID
+    );
+
+
+
+-- ========================================================================================
+-- ========================================================================================
+-- ========================================================================================
+
+
+    -- Formular erstellen: Bank Information Form
+    V_JSON_ID := SFB_JSON_FORM_PKG.CREATE_ROW(
+                    p_json_name           => 'Help Us Serve You Better '|| v_counter,
+                    p_json_code           => NULL,
+                    p_json_remark         => 'Survey'
+                );
+
+        -- update session
+    update SFB_JSON_FORM
+       set JSON_USER_SESSION_ID = v('APP_SESSION')
+     where JSON_ID = V_JSON_ID
+    ;
+
+    V_HFAT_ID    := null;
+    SFB_P0001_PKG.SET_HELP_FORM_ATTRIBUTES(
+        pio_hfat_id             => V_HFAT_ID,
+        pi_mode                 => 'NEW',
+        pi_hfat_attr_fk         => V_ATTR_ID_STRING,
+        pi_hfat_jason_fk        => V_JSON_ID,
+        pi_hfat_name            => 'Preferred Contact Method',
+        pi_hfat_required_yn     => 'Y'
+        );
+
+        v_hjdp_id   := null;
+        SFB_P0001_PKG.SET_HELP_JSON_DATA_TYPE_PROPERTIES( 
+                pio_hjdp_id             => v_hjdp_id
+              , pi_mode                 => 'NEW'
+              , pi_hjdp_name            => 'radio'
+              , pi_hjdp_hfat_fk         => V_HFAT_ID
+              , pi_hjdp_prop_fk         => v_prop_id_ITEMTYPE
+                ); 
+
+        v_hjdp_id   := null;
+        SFB_P0001_PKG.SET_HELP_JSON_DATA_TYPE_PROPERTIES( 
+                pio_hjdp_id             => v_hjdp_id
+              , pi_mode                 => 'NEW'
+              , pi_hjdp_name            => 'Phone, Email, None'
+              , pi_hjdp_hfat_fk         => V_HFAT_ID
+              , pi_hjdp_prop_fk         => v_prop_id_ENUM
+            ); 
+
+    V_HFAT_ID    := null;
+    SFB_P0001_PKG.SET_HELP_FORM_ATTRIBUTES(
+        pio_hfat_id             => V_HFAT_ID,
+        pi_mode                 => 'NEW',
+        pi_hfat_attr_fk         => V_ATTR_ID_URL,
+        pi_hfat_jason_fk        => V_JSON_ID,
+        pi_hfat_name            => 'Profile url:',
+        pi_hfat_required_yn     => 'N'
+    );
+
+    V_HFAT_ID    := null;
+    SFB_P0001_PKG.SET_HELP_FORM_ATTRIBUTES(
+        pio_hfat_id             => V_HFAT_ID,
+        pi_mode                 => 'NEW',
+        pi_hfat_attr_fk         => V_ATTR_ID_INTEGER,
+        pi_hfat_jason_fk        => V_JSON_ID,
+        pi_hfat_name            => 'Phone Number',
+        pi_hfat_required_yn     => 'N'
+    );
+    
+        v_hjdp_id   := null;
+        SFB_P0001_PKG.SET_HELP_JSON_DATA_TYPE_PROPERTIES( 
+                pio_hjdp_id             => v_hjdp_id
+              , pi_mode                 => 'NEW'
+              , pi_hjdp_name            => 'Enter your phone number'
+              , pi_hjdp_hfat_fk         => V_HFAT_ID
+              , pi_hjdp_prop_fk         => v_prop_id_PLACEHOLDER
+            ); 
+
+    V_HFAT_ID    := null;
+    SFB_P0001_PKG.SET_HELP_FORM_ATTRIBUTES(
+        pio_hfat_id             => V_HFAT_ID,
+        pi_mode                 => 'NEW',
+        pi_hfat_attr_fk         => V_ATTR_ID_DATE_TIME,
+        pi_hfat_jason_fk        => V_JSON_ID,
+        pi_hfat_name            => 'Submit Date',
+        pi_hfat_required_yn     => 'Y'
+    );
+
+
+        V_HFAT_ID    := null;
+    SFB_P0001_PKG.SET_HELP_FORM_ATTRIBUTES(
+        pio_hfat_id             => V_HFAT_ID,
+        pi_mode                 => 'NEW',
+        pi_hfat_attr_fk         => V_ATTR_ID_STRING,
+        pi_hfat_jason_fk        => V_JSON_ID,
+        pi_hfat_name            => 'Comments',
+        pi_hfat_required_yn     => 'N'
+    );
+
+            v_hjdp_id   := null;
+        SFB_P0001_PKG.SET_HELP_JSON_DATA_TYPE_PROPERTIES( 
+                pio_hjdp_id             => v_hjdp_id
+              , pi_mode                 => 'NEW'
+              , pi_hjdp_name            => 'Enter your phone number'
+              , pi_hjdp_hfat_fk         => V_HFAT_ID
+              , pi_hjdp_prop_fk         => v_prop_id_PLACEHOLDER
+            ); 
+
+        v_hjdp_id   := null;
+        SFB_P0001_PKG.SET_HELP_JSON_DATA_TYPE_PROPERTIES( 
+                pio_hjdp_id             => v_hjdp_id
+              , pi_mode                 => 'NEW'
+              , pi_hjdp_name            => 'textarea'
+              , pi_hjdp_hfat_fk         => V_HFAT_ID
+              , pi_hjdp_prop_fk         => v_prop_id_ITEMTYPE
+            ); 
+
+            v_hjdp_id   := null;
+        SFB_P0001_PKG.SET_HELP_JSON_DATA_TYPE_PROPERTIES( 
+                pio_hjdp_id             => v_hjdp_id
+              , pi_mode                 => 'NEW'
+              , pi_hjdp_name            => '8'
+              , pi_hjdp_hfat_fk         => V_HFAT_ID
+              , pi_hjdp_prop_fk         => v_prop_id_LINES
+            ); 
+
+    SFB_P0001_PKG.pr_create_json (
+    pi_JSON_ID    => V_JSON_ID
+    );
+
+-- ========================================================================================
+-- ========================================================================================
+-- ========================================================================================
+ 
+-- Formular erstellen: Employee Skills
+    V_JSON_ID := SFB_JSON_FORM_PKG.CREATE_ROW(
+                    p_json_name           => 'Employee Skills '|| v_counter,
+                    p_json_code           => NULL,
+                    p_json_remark         => 'Form to collect ualification information'
+                ); 
+    -- update session
+    update SFB_JSON_FORM
+       set JSON_USER_SESSION_ID = v('APP_SESSION')
+     where JSON_ID = V_JSON_ID
+    ;
+
+   -- create ref form
+    SFB_HELP_REFRENZ_JSON_FORM_PKG.create_row (   
+       p_hrjf_main_json_fk          => v_json_id_emp_form
+     , p_hrjf_refrenz_json_fk       => V_JSON_ID
+     , p_HRJF_ARRAY_YN              => 'Y'
+     , p_hrjf_name                  => 'Qualifications'
+    ); 
+
+    -- Set form attributes:
+    V_HFAT_ID    := null;
+    SFB_P0001_PKG.SET_HELP_FORM_ATTRIBUTES(
+        pio_hfat_id             => V_HFAT_ID,
+        pi_mode                 => 'NEW',
+        pi_hfat_attr_fk         => V_ATTR_ID_string,
+        pi_hfat_jason_fk        => V_JSON_ID,
+        pi_hfat_name            => 'Skill Name',
+        pi_hfat_required_yn     => 'N'
+    );
+
+    -- Set form attributes:
+    V_HFAT_ID    := null;
+    SFB_P0001_PKG.SET_HELP_FORM_ATTRIBUTES(
+        pio_hfat_id             => V_HFAT_ID,
+        pi_mode                 => 'NEW',
+        pi_hfat_attr_fk         => V_ATTR_ID_INTEGER,
+        pi_hfat_jason_fk        => V_JSON_ID,
+        pi_hfat_name            => 'Years of Experience',
+        pi_hfat_required_yn     => 'N'
+    );
+
+    -- Set form attributes:
+    V_HFAT_ID    := null;
+    SFB_P0001_PKG.SET_HELP_FORM_ATTRIBUTES(
+        pio_hfat_id             => V_HFAT_ID,
+        pi_mode                 => 'NEW',
+        pi_hfat_attr_fk         => V_ATTR_ID_BOOLEAN,
+        pi_hfat_jason_fk        => V_JSON_ID,
+        pi_hfat_name            => 'Certified Developer ',
+        pi_hfat_required_yn     => 'N'
+    );
+
+    SFB_P0001_PKG.pr_create_json (
+    pi_JSON_ID    => V_JSON_ID
+    );
+
+-- ========================================================================================
+-- ========================================================================================
+-- ========================================================================================
+    
+    -- run final, to get all sub forms
+    SFB_P0001_PKG.pr_create_json (
+        pi_JSON_ID    => v_json_id_emp_form
+    );
+
+end pr_install_example;
 
 
 end SFB_P0001_PKG;
