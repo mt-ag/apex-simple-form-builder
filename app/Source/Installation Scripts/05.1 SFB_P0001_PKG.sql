@@ -118,6 +118,26 @@ end SFB_P0001_PKG;
 /
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 create or replace package body SFB_P0001_PKG as
 
 
@@ -1534,6 +1554,12 @@ begin
        set JSON_USER_SESSION_ID = v('APP_SESSION')
      where JSON_ID = V_JSON_ID
     ;
+    -- create ref form
+    SFB_HELP_REFRENZ_JSON_FORM_PKG.create_row (   
+       p_hrjf_main_json_fk          => v_json_id_emp_form
+     , p_hrjf_refrenz_json_fk       => V_JSON_ID 
+     , p_hrjf_name                  => 'Help us'
+    );  
 
     V_HFAT_ID    := null;
     SFB_P0001_PKG.SET_HELP_FORM_ATTRIBUTES(
