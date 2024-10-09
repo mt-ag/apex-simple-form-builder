@@ -33,16 +33,16 @@ prompt APPLICATION 102 - JSON Simple Form Builder
 -- Application Export:
 --   Application:     102
 --   Name:            JSON Simple Form Builder
---   Date and Time:   14:02 Wednesday October 9, 2024
+--   Date and Time:   19:41 Wednesday October 9, 2024
 --   Exported By:     SAJJAD.HANIFA@HYAND.COM
 --   Flashback:       0
 --   Export Type:     Application Export
---     Pages:                     23
---       Items:                   70
+--     Pages:                     22
+--       Items:                   69
 --       Validations:              5
 --       Processes:               37
---       Regions:                 60
---       Buttons:                 39
+--       Regions:                 59
+--       Buttons:                 38
 --       Dynamic Actions:         11
 --     Shared Components:
 --       Logic:
@@ -211,7 +211,7 @@ wwv_flow_imp_shared.create_list(
  p_id=>wwv_flow_imp.id(308068723434074879832)
 ,p_name=>'Navigation Bar'
 ,p_list_status=>'PUBLIC'
-,p_version_scn=>741730766
+,p_version_scn=>742443997
 );
 wwv_flow_imp_shared.create_list_item(
  p_id=>wwv_flow_imp.id(47329680345243454051)
@@ -236,7 +236,7 @@ wwv_flow_imp_shared.create_list_item(
  p_id=>wwv_flow_imp.id(2052735211379737)
 ,p_list_item_display_sequence=>81
 ,p_list_item_link_text=>'Github'
-,p_list_item_link_target=>'https://github.com/simonuwe/oracle-apex-json-region'
+,p_list_item_link_target=>'https://github.com/mt-ag/apex-simple-form-builder'
 ,p_list_item_icon=>'fa-network-hub'
 ,p_list_item_current_type=>'TARGET_PAGE'
 );
@@ -1478,7 +1478,7 @@ wwv_flow_imp_shared.create_flow_process(
 '    end if;',
 'end;'))
 ,p_process_clob_language=>'PLSQL'
-,p_version_scn=>741796451
+,p_version_scn=>742475439
 );
 end;
 /
@@ -17428,7 +17428,7 @@ wwv_flow_imp_shared.create_automation(
 ,p_static_id=>'delete-old-forms'
 ,p_trigger_type=>'POLLING'
 ,p_polling_interval=>'FREQ=DAILY;INTERVAL=1;BYHOUR=0;BYMINUTE=0'
-,p_polling_status=>'DISABLED'
+,p_polling_status=>'ACTIVE'
 ,p_result_type=>'ALWAYS'
 ,p_use_local_sync_table=>false
 ,p_include_rowid_column=>false
@@ -25591,65 +25591,6 @@ wwv_flow_imp_page.create_component_action(
 ,p_display_sequence=>10
 ,p_link_target_type=>'REDIRECT_PAGE'
 ,p_link_target=>'f?p=&APP_ID.:1:&SESSION.::&DEBUG.:1:P1_JSON_ID,P1_PAGE_MODE:&JSON_ID.,EDIT'
-);
-end;
-/
-prompt --application/pages/page_00002
-begin
-wwv_flow_imp_page.create_page(
- p_id=>2
-,p_name=>'test'
-,p_alias=>'TEST'
-,p_step_title=>'test'
-,p_autocomplete_on_off=>'OFF'
-,p_page_template_options=>'#DEFAULT#'
-,p_page_is_public_y_n=>'Y'
-,p_protection_level=>'C'
-,p_page_component_map=>'17'
-);
-wwv_flow_imp_page.create_page_plug(
- p_id=>wwv_flow_imp.id(82890811193321699314)
-,p_plug_name=>'New'
-,p_region_template_options=>'#DEFAULT#:t-Region--scrollBody'
-,p_plug_template=>wwv_flow_imp.id(308068537282426879690)
-,p_plug_display_sequence=>10
-,p_location=>null
-,p_plug_source_type=>'PLUGIN_JSON_REGION.UWESIMON.SELFHOST.E'
-,p_attributes=>wwv_flow_t_plugin_attributes(wwv_flow_t_varchar2(
-  'attribute_01', '250',
-  'attribute_02', '1',
-  'attribute_03', '{ "type": "object", "properties": { "lastname": {"type": "string", "maxLength": 30}, "firstname": {"type": "string", "maxLength": 30}, "email": {"type": "string", "format": "email"}, "comments": { "type": "array", "items": {"$ref": "#/$defs/comment"}, "readOnly": true, "apex": { "hasInsert": "begin", "xhasDelete": false } } }, "$defs":{ "comment": { "type": "object", "properties": { "comment": {"type": "string"}, "datetime": {"type": "string", "format": "date-time", "default": "NOW"} } } } }',
-  'attribute_05', '3',
-  'attribute_06', 'Y',
-  'attribute_07', 'Y',
-  'attribute_08', 'Y',
-  'attribute_09', 'Y',
-  'attribute_10', 'P2_NEW',
-  'attribute_11', 'floating')).to_clob
-);
-wwv_flow_imp_page.create_page_button(
- p_id=>wwv_flow_imp.id(82890811427134699316)
-,p_button_sequence=>30
-,p_button_name=>'New'
-,p_button_action=>'SUBMIT'
-,p_button_template_options=>'#DEFAULT#'
-,p_button_template_id=>wwv_flow_imp.id(308068610672149879723)
-,p_button_image_alt=>'New'
-,p_grid_new_row=>'Y'
-);
-wwv_flow_imp_page.create_page_item(
- p_id=>wwv_flow_imp.id(82890811365523699315)
-,p_name=>'P2_NEW'
-,p_item_sequence=>20
-,p_prompt=>'New'
-,p_display_as=>'NATIVE_TEXT_FIELD'
-,p_cSize=>30
-,p_field_template=>wwv_flow_imp.id(308068608165310879722)
-,p_item_template_options=>'#DEFAULT#'
-,p_attribute_01=>'N'
-,p_attribute_02=>'N'
-,p_attribute_04=>'TEXT'
-,p_attribute_05=>'BOTH'
 );
 end;
 /
