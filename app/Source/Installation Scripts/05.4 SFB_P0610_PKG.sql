@@ -71,6 +71,10 @@ begin
      where HRJF_MAIN_JSON_FK = pi_JSON_ID
     ; 
 
+    -- delete from other references
+    delete from SFB_HELP_REFRENZ_JSON_FORM 
+     where HRJF_REFRENZ_JSON_FK = pi_JSON_ID
+    ; 
 
     -- delete form
     delete from SFB_JSON_FORM 

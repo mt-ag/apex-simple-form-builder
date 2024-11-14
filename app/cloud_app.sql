@@ -33,7 +33,7 @@ prompt APPLICATION 102 - JSON Simple Form Builder
 -- Application Export:
 --   Application:     102
 --   Name:            JSON Simple Form Builder
---   Date and Time:   19:40 Wednesday October 9, 2024
+--   Date and Time:   09:55 Thursday November 14, 2024
 --   Exported By:     SAJJAD.HANIFA@HYAND.COM
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -1478,7 +1478,7 @@ wwv_flow_imp_shared.create_flow_process(
 '    end if;',
 'end;'))
 ,p_process_clob_language=>'PLSQL'
-,p_version_scn=>741798106
+,p_version_scn=>742476447
 );
 end;
 /
@@ -40303,6 +40303,10 @@ wwv_flow_imp_shared.create_install_script(
 '     where HRJF_MAIN_JSON_FK = pi_JSON_ID',
 '    ; ',
 '',
+'    -- delete from other references',
+'    delete from SFB_HELP_REFRENZ_JSON_FORM ',
+'     where HRJF_REFRENZ_JSON_FK = pi_JSON_ID',
+'    ; ',
 '',
 '    -- delete form',
 '    delete from SFB_JSON_FORM ',
@@ -40429,7 +40433,7 @@ wwv_flow_imp_shared.create_install_script(
 '   </head>',
 '   <body class="c23 doc-content">',
 '      <p class="c3"><span class="c5"></span></p>',
-'      <p class="c18 title" id="h.e89bu4ma84le"><span class="c16 c20">Table of Conent</span></p>',
+'      <p class="c18 title" id="h.e89bu4ma84le"><span class="c16 c20">Table of Content</span></p>',
 '      <p class="c3"><span class="c5"></span></p>',
 '      <p class="c3"><span class="c5"></span></p>',
 '      <p class="c3"><span class="c5"></span></p>',
@@ -40658,12 +40662,12 @@ wwv_flow_imp_shared.create_install_script(
 ||'ranslateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></span></p>',
 '      <p class="c3"><span class="c0"></span></p>',
 '      <p class="c4"><span class="c0">Setting Properties and Values</span></p>',
-'      <p '))
+'      <p'))
 );
 wwv_flow_imp_shared.append_to_install_script(
  p_id=>wwv_flow_imp.id(46233532868204062158)
 ,p_script_clob=>wwv_flow_string.join(wwv_flow_t_varchar2(
-'class="c4"><span class="c5">Select the Property from the dropdown and manually enter the Property Value.</span></p>',
+' class="c4"><span class="c5">Select the Property from the dropdown and manually enter the Property Value.</span></p>',
 '      <p class="c4"><span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 601.70px; height: 97'
 ||'.33px;"><img alt="" src="https://raw.githubusercontent.com/mt-ag/apex-simple-form-builder/refs/heads/main/documentation/images/image50.png" style="width: 601.70px; height: 97.33px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) t'
 ||'ranslateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></span></p>',
@@ -40879,13 +40883,13 @@ wwv_flow_imp_shared.append_to_install_script(
 ||'anslateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></span></p>',
 '      <p class="c4"><span class="c7">Defining Field Name and Type</span></p>',
 '      <p class="c4"><span class="c5">Enter the Field Name, choose the Field Type, and check &quot;Required&quot; for validation if needed.</span></p>',
-'      <p class="c4"><span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #00'))
+'      <p class="c4"><span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #0'))
 );
 wwv_flow_imp_shared.append_to_install_script(
  p_id=>wwv_flow_imp.id(46233532868204062158)
 ,p_script_clob=>wwv_flow_string.join(wwv_flow_t_varchar2(
-'0000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 601.70px; height: 30.67px;"><img alt="" src="https://raw.githubusercontent.com/mt-ag/apex-simple-form-builder/refs/heads/main/documentation/i'
-||'mages/image24.png" style="width: 601.70px; height: 30.67px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></span></p>',
+'00000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 601.70px; height: 30.67px;"><img alt="" src="https://raw.githubusercontent.com/mt-ag/apex-simple-form-builder/refs/heads/main/documentation/'
+||'images/image24.png" style="width: 601.70px; height: 30.67px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></span></p>',
 '      <p class="c4"><span class="c0">Setting Properties and Values</span></p>',
 '      <p class="c4"><span class="c5">Select the Property from the dropdown and manually enter the Property Value.</span></p>',
 '      <p class="c4"><span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 601.70px; height: 54'

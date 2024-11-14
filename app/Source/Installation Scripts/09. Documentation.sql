@@ -9,7 +9,7 @@ update SFB_HELP_TEXT set HETE_TEXT = ( HETE_TEXT||'<html>
    </head>
    <body class="c23 doc-content">
       <p class="c3"><span class="c5"></span></p>
-      <p class="c18 title" id="h.e89bu4ma84le"><span class="c16 c20">Table of Conent</span></p>
+      <p class="c18 title" id="h.e89bu4ma84le"><span class="c16 c20">Table of Content</span></p>
       <p class="c3"><span class="c5"></span></p>
       <p class="c3"><span class="c5"></span></p>
       <p class="c3"><span class="c5"></span></p>
